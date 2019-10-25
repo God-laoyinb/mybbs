@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bbs.mapper.UserMapper">
+	<resultMap type="com.bbs.pojo.User" id="userMap">
+		<id property="uId" column="uid"/>
+		<result property="userName" column="userName"/>
+		<result property="state" column="state"/>
+		<result property="password" column="password"/>
+	</resultMap>
+	<select id="getUserById" parameterType="java.lang.Integer" resultMap="userMap">
+		SELECT * FROM user WHERE uId=#{uId}
+	</select>
+	<insert id="insetUser" parameterType="com.bbs.pojo.User">
+		insert into user(userName,password,state) values(#{userName},#{password},#{state}); 
+	</insert>
+	<select id="getUserByName" parameterType="java.lang.String" resultMap="userMap">
+		select * from user where userName=#{userName}
+	</select>
+		<select id="getAllUser" resultMap="userMap">
+			select * from user
+		</select>
+		<update id="stopUser" parameterType="java.lang.String">
+			update user set state = 0 where userName=#{userName}
+		</update>
+		<update id="startUser" parameterType="java.lang.String">
+			update user set state = 1 where userName=#{userName}
+		</update>
+		<update id="updateUser" parameterType="com.bbs.pojo.User">
+			update user set userName=#{userName},password=md5(#{password}) where uid=#{uId}
+		</update>
+		<delete id="deletUser" parameterType="java.lang.Integer">
+		delete from user where uid=#{uId}
+		</delete>
+	
+</mapper>

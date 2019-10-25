@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bbs.mapper.AdminMapper">
+	<resultMap id="adminMap" type="com.bbs.pojo.Admin" >
+		<id property="id" column="id"/>
+		<result property="adminName" column="adminName"/>
+		<result property="password" column="password"/>
+		<result property="state" column="state"/>
+	</resultMap> 
+	<select id="getAdminByName" parameterType="java.lang.String" resultMap="adminMap">
+		SELECT * FROM admin WHERE adminName=#{adminName,jdbcType=VARCHAR} AND state=1
+	</select> 
+	
+	<select id="getAdminAllByName" parameterType="java.lang.String" resultMap="adminMap">
+		SELECT * FROM admin WHERE adminName=#{adminName,jdbcType=VARCHAR} 
+	</select>
+	
+	       
+	<select id="getAllAdmin"  resultMap="adminMap">
+       SELECT * FROM admin 
+   	</select>
+    
+    <insert id="insertAdmin" parameterType="com.bbs.pojo.Admin" useGeneratedKeys="true" keyProperty="id">
+       INSERT INTO admin(adminName,password) VALUES (#{adminName},md5(#{password})) 
+    </insert>
+    <update id="stopAdmin" parameterType="java.lang.String">
+    	update admin set state = 0 where adminName=#{adminName}
+    </update>
+    <update id="startAdmin" parameterType="java.lang.String">
+    	update admin set state = 1 where adminName=#{adminName}
+    </update>
+    <update id="updateAdmin" parameterType="com.bbs.pojo.Admin">
+       update admin set adminName=#{adminName},password=md5(#{password}) where id=#{id}
+    </update>
+   <!--  
+  	
+   	<select id="getAdminById" parameterType="java.lang.Integer" resultType="com.exam.pojo.Admin">
+       SELECT * FROM admin WHERE id=#{id,jdbcType=TINYINT} AND state=1
+   	</select>
+     -->
+</mapper>

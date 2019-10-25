@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bbs.mapper.ReplyMapper">
+	<resultMap type="com.bbs.pojo.Reply" id="replyMap">
+		<id property="rId" column="rid"/>
+		<result property="postId" column="postId"/>
+		<result property="replyTime" column="replyTime"/>
+		<result property="content" column="content"/>
+		<result property="state" column="state"/>
+		<association property="user" column="userId" select="com.bbs.mapper.UserMapper.getUserById"></association>
+	</resultMap>
+	<!-- 以分页的形式通过帖子编号获取回复列表  -->
+	<select id="getReplyByPostId" parameterType="java.util.Map" resultMap="replyMap">
+		SELECT * FROM reply WHERE postId=#{postId} AND state=1 ORDER BY rid DESC LIMIT #{start},#{offset}
+	</select>
+	<!-- 获取评论总记录数   -->
+	<select id="getReplyTotalCountByPostId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM reply WHERE postId=#{postId} AND state=1
+	</select>
+	<!-- 添加回复   -->
+	<insert id="addReply" parameterType="java.util.Map">
+		INSERT INTO reply(postId,userId,content,replyTime) VALUES(#{postId},#{userId},#{content},#{replyTime})
+	</insert>
+</mapper>

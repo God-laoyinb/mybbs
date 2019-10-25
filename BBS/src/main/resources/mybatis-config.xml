@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<mappers>
+	 	<mapper resource="com/bbs/mapper/UserMapper.xml"></mapper>
+	    <mapper resource="com/bbs/mapper/PostMapper.xml"></mapper>
+	    <mapper resource="com/bbs/mapper/ReplyMapper.xml"></mapper>
+	    <mapper resource="com/bbs/mapper/AdminMapper.xml"></mapper>
+	    <mapper resource="com/bbs/mapper/BlockMapper.xml"></mapper>
+	</mappers>
+</configuration>

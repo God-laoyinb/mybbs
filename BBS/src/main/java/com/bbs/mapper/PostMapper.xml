@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bbs.mapper.PostMapper">
+	<resultMap id="postMap" type="com.bbs.pojo.Post"> 
+		<id property="pId" column="pId"></id>
+		<result property="content" column="content"/>
+		<result property="state" column="state"/>
+		<result property="isHot" column="isHot"/>
+		<result property="imgAddress" column="imgAddress"/>
+		<result property="title" column="title"/>
+		<result property="postTime" column="postTime"/>
+		<association property="replyNum" column="pId" select="com.bbs.mapper.ReplyMapper.getReplyTotalCountByPostId"></association>
+		<association property="block" column="blockId" select="com.bbs.mapper.BlockMapper.getBlockById"></association>
+		<association property="user" column="userId" select="com.bbs.mapper.UserMapper.getUserById"></association>
+	</resultMap>
+	<select id="getPostByBlockId" parameterType="java.util.Map" resultMap="postMap">
+		SELECT * FROM post WHERE state=1 AND blockId=#{blockId} LIMIT #{start},#{offset}
+	</select>
+	<select id="getPostByKeyword" parameterType="java.util.Map" resultMap="postMap">
+		SELECT * FROM post WHERE state=1 AND content LIKE '%${keyword}%' order by postTime desc LIMIT #{start},#{offset}
+	</select>
+	<select id="getTotalCountByBlockId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM post WHERE blockId=#{blockId} AND state=1
+	</select>
+	<select id="getTotalCountByKeyword" parameterType="java.util.Map" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM post WHERE state=1 And content LIKE '%${keyword}%' order by postTime desc 
+	</select>
+	<select id="getPostById" parameterType="java.lang.Integer" resultMap="postMap">
+		SELECT * FROM post WHERE pId=#{pid} AND state=1
+	</select>
+	<select id="getLastPostByNum" parameterType="java.lang.Integer" resultMap="postMap">
+		SELECT * FROM post WHERE state=1 ORDER BY pId DESC LIMIT 0,#{num} 
+	</select>
+	<select id="getHotPostByNum" parameterType="java.lang.Integer" resultMap="postMap">
+		SELECT * FROM post WHERE state=1 AND isHot=1 ORDER BY pId DESC LIMIT 0,#{num}
+	</select>
+	<select id="getAllPostByPaging" parameterType="java.util.Map" resultMap="postMap">
+		SELECT * FROM post WHERE state=1 LIMIT #{start},#{offset} 
+	</select>
+	<select id="getTotalCount" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM post WHERE state=1
+	</select>
+	<update id="updatePost" parameterType="com.bbs.pojo.Post">
+		UPDATE post SET isHot=#{isHot},content=#{content},title=#{title},blockId=#{block.bId} WHERE pId=#{pId}
+	</update>
+	<update id="deletePost" parameterType="java.lang.Integer">
+		UPDATE post SET state=0 WHERE pId=#{postId}
+	</update>
+	<insert id="addPost" parameterType="com.bbs.pojo.Post" useGeneratedKeys="true">
+		INSERT INTO post(title,blockId,content,userId,postTime<if test="null!=imgAddress">,imgAddress</if>) 
+			VALUES(#{title},#{block.bId},#{content},#{user.uId},NOW()<if test="null!=imgAddress">,#{imgAddress}</if>)
+	</insert>
+	<select id="getPost" parameterType="java.util.Map" resultMap="postMap">
+		SELECT * FROM post WHERE state=1
+		<if test="null!=userId"> 
+			AND userId=#{userId}
+		</if>
+	</select>
+</mapper>

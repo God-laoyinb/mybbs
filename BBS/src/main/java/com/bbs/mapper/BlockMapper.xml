@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bbs.mapper.BlockMapper">
+	<resultMap id="blockMap" type="com.bbs.pojo.Block">
+		<id property="bId" column="bid"/>
+		<result property="blockName" column="blockName"/>
+		<result property="state" column="state"/>
+	</resultMap>
+	<select id="getAllBlock" resultMap="blockMap">
+		SELECT * FROM block WHERE state=1
+	</select>
+	<select id="getBlockById" resultMap="blockMap">
+		SELECT * FROM block WHERE bId=#{bId} AND state=1
+	</select>
+	<select id="getBlockByName" resultMap="blockMap">
+		SELECT * FROM block WHERE blockName=#{blockName} AND state=1
+	</select>
+	<select id="getBlockValueByBlockId" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM block WHERE bId&lt;#{blockId} AND state=1
+	</select>
+	<insert id="addBlock" parameterType="java.lang.String" useGeneratedKeys="true">
+		INSERT INTO block(blockName) VALUES(#{blockName})
+	</insert>
+	<update id="updateBlock" parameterType="com.bbs.pojo.Block">
+		UPDATE block SET blockName=#{blockName},state=#{state} WHERE bId=#{bId}
+	</update>
+</mapper>
