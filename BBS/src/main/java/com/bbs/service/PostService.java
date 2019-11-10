@@ -11,7 +11,13 @@ import com.bbs.pojo.Post;
  * 帖子服务层
  */
 public interface PostService {
-		
+	
+	/**
+	 * 通过用户id获取帖子
+	 * @param map
+	 * @return
+	 */
+	public Paging<Post> getMyPost(Map map);
 	/**
 	 * 以分页的形式获取帖子
 	 * @param map 可选参数  blockName版块名称  keyword 关键字

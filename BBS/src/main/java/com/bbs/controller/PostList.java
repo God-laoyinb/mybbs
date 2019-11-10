@@ -10,11 +10,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.bbs.pojo.Paging;
 import com.bbs.pojo.Post;
+import com.bbs.pojo.User;
 import com.bbs.service.PostService;
 import com.google.gson.Gson;
 
@@ -77,6 +80,26 @@ public class PostList {
 		String s = gson.toJson(paging);
 		printWriter.write(s);
 		printWriter.close();
+	}
+	@RequestMapping("/getMyPost")
+	public @ResponseBody Paging<Post> getMyPost(HttpServletRequest request,HttpServletResponse response) {
+		response.setContentType("text/xml;charset=UTF-8");
+	    response.setCharacterEncoding("UTF-8");
+		User user =(User) request.getSession().getAttribute("user");
+		Integer page = Integer.parseInt(request.getParameter("page")); 
+		Integer pageSize = Integer.parseInt(request.getParameter("pageSize")); 
+		Paging<Post> paging = null;
+		if(user!=null) {
+			Integer userId = user.getuId();
+			Map map = new HashMap();
+			map.put("userId",userId);
+			map.put("page",page);
+			map.put("pageSize",pageSize);
+			paging = postService.getMyPost(map);
+			System.out.println(paging);
+		
+		}
+		return paging;
 	}
 	@RequestMapping("/searchPostByPaging")
 	public void searchPostByPaging(HttpServletRequest request,HttpServletResponse response) throws IOException {

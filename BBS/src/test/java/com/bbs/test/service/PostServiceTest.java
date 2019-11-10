@@ -16,7 +16,17 @@ import com.bbs.service.PostService;
 
 public class PostServiceTest {
 	
-	
+	@Test
+	public void getmypost() {
+		ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+		PostService postService = ctx.getBean("postServiceImpl",PostService.class);
+		Map map1 = new HashMap();
+		map1.put("userId",1);
+		map1.put("page",1);
+		map1.put("pageSize",10);
+		 Paging<Post> list = postService.getMyPost(map1);
+		 System.out.println(list);
+	}
 	/**
 	 * 测试通过不同类型和数量获取帖子列表
 	 */

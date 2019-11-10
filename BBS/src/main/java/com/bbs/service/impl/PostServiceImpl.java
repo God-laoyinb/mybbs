@@ -175,5 +175,25 @@ public class PostServiceImpl implements PostService {
 	public Paging<Post> getPost(Map map) {
 		return null;
 	}
+	@Override
+	public Paging<Post> getMyPost(Map map) {
+		Integer currentPage = (Integer)map.get("page"); //当前页
+		Integer pageSize = (Integer)map.get("pageSize");
+		Integer userId = (Integer)map.get("userId");
+		if(null != userId) {
+			
+			Map map1 = new HashMap<Object,Object>();
+			map1.put("userId",userId);
+			map1.put("start",(currentPage-1)*pageSize);
+			map1.put("offset",pageSize);
+			List<Post> postList = postMapper.getMyPost(map1);
+			paging.setList(postList); //test
+			paging.setCurrentPage(currentPage);
+			paging.setPageSize(pageSize);
+			paging.setTotalCount(postMapper.getTotalCountMypost(map1));
+			
+		}
+		return paging;
+	}
 	
 }

@@ -24,6 +24,12 @@ public interface PostMapper {
 	 * @return 帖子列表
 	 */
 	public List<Post> getPostByKeyword(Map map);
+	/**
+	 *根据用户id返回帖子
+	 * @param map
+	 * @return
+	 */
+	public List<Post> getMyPost(Map map);
 	
 	/**
 	 * 根据条件获取分页总记录数
@@ -98,6 +104,8 @@ public interface PostMapper {
 	 * @return 帖子列表
 	 */
 	public List<Post> getPost(Map map);
+
+	public Integer getTotalCountMypost(Map map);
 
 }
 

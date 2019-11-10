@@ -15,6 +15,12 @@
 		<association property="block" column="blockId" select="com.bbs.mapper.BlockMapper.getBlockById"></association>
 		<association property="user" column="userId" select="com.bbs.mapper.UserMapper.getUserById"></association>
 	</resultMap>
+	<select id="getMyPost" parameterType="java.util.Map" resultMap="postMap">
+		select * from post where state = 1 and userId=#{userId} order by postTime desc LIMIT #{start},#{offset}
+	</select>
+	<select id="getTotalCountMypost" parameterType="java.util.Map" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM post WHERE state=1 And userId=#{userId} order by postTime desc 
+	</select>
 	<select id="getPostByBlockId" parameterType="java.util.Map" resultMap="postMap">
 		SELECT * FROM post WHERE state=1 AND blockId=#{blockId} LIMIT #{start},#{offset}
 	</select>
